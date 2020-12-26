@@ -89,6 +89,16 @@ namespace workshopgen
             if (string.IsNullOrEmpty(config.fullpath))
                 config.fullpath = workingPath;
 
+            if (!string.IsNullOrEmpty(args[0]))
+            {
+                Console.WriteLine(string.Format("Using provided Workshop ID: {0}", args[0]));
+                config.workshop_id = args[0];
+            }
+            else
+            {
+                Console.WriteLine(string.Format("Using default Workshop ID: {0}", config.workshop_id));
+            }
+
             SetupInterfaces();      // Setup the SteamRemoteStorage interface
             var response = await SendRequestAsync(); // Get the response from Steam WebAPI as string
 
