@@ -110,7 +110,7 @@ namespace workshopgen
             int count = CollectionContents.Count;
             int progress = 0;
             Console.Write("[");
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < 50; i++)
             {
                 Console.Write(" ");
             }
@@ -128,7 +128,7 @@ namespace workshopgen
                 // Progress bar
                 progress++;
                 decimal percentage = ((decimal)progress / (decimal)count) * 100;
-                Console.SetCursorPosition(progress, 0);
+                Console.SetCursorPosition((int)(percentage / 2), 0);
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.Write("\u25A0"); // block character
                 Console.ResetColor();
