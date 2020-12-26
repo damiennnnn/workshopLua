@@ -128,7 +128,7 @@ namespace workshopgen
                 // Progress bar
                 progress++;
                 decimal percentage = ((decimal)progress / (decimal)count) * 100;
-                Console.SetCursorPosition((int)(percentage / 2), 0);
+                Console.SetCursorPosition(1 + (int)(percentage / 2), 0);
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.Write("\u25A0"); // block character
                 Console.ResetColor();
