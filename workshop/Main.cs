@@ -121,6 +121,8 @@ namespace workshopgen
             foreach (var file in Deserialised.response.collectiondetails[0].children)
             {
                 var webResponse = await SteamInterface.GetPublishedFileDetailsAsync(ulong.Parse(file.publishedfileid));
+                try
+                {
                 PublishedFileDetailsModel fileDetails = webResponse.Data;
 
                 // Progress bar
@@ -138,6 +140,12 @@ namespace workshopgen
                     , "                                                                            ")); // Output file information
                 
                 Files.Add(fileDetails);
+                }
+                catch (Exception e)
+                {
+                    if (Verbose)
+                        Console.WriteLine(e.Message);
+                }
             }
 
             List<string> Lua = new List<string>(); // Create a list of strings to write to our workshop.lua
