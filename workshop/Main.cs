@@ -97,6 +97,7 @@ namespace workshopgen
             List<Child> CollectionContents = Deserialised.response.collectiondetails[0].children; // We are looking for only the children of the collection.
 
             // Setting up a visual progress bar. (The generation process can take a while.)
+            Console.Clear();
             int count = CollectionContents.Count;
             int progress = 0;
             Console.Write("[");
