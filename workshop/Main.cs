@@ -31,7 +31,6 @@ namespace workshopgen
             public string workshop_id { get; set; }
         }
 
-
         public static SteamRemoteStorage SteamInterface;
 
         static async Task<string> SendRequestAsync()
