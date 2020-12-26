@@ -125,16 +125,18 @@ namespace workshopgen
 
                 // Progress bar
                 progress++;
+                decimal percentage = (progress / count) * 100;
                 Console.SetCursorPosition(progress, 0);
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.Write("\u25A0"); // block character
                 Console.ResetColor();
                 Console.SetCursorPosition(0, 1);
-                Console.WriteLine(string.Format(" {0}/{1} ", progress, count));
+                Console.WriteLine(string.Format(" {0}/{1} {2}", progress, count, percentage));
                 Console.WriteLine("");
                 //
-                Console.WriteLine(string.Concat(fileDetails.Title, " ", fileDetails.PublishedFileId)); // Output information in realtime
-
+                Console.WriteLine(string.Concat(fileDetails.Title, " ", fileDetails.PublishedFileId
+                    , "                                                                         ")); // Output file information
+                
                 Files.Add(fileDetails);
             }
 
