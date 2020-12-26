@@ -66,7 +66,7 @@ namespace workshopgen
             else
             {
                 Console.WriteLine(string.Format("Creating config file at: {0}", configLocation));
-                File.Create(configLocation);
+                File.WriteAllText(configLocation, JsonConvert.SerializeObject(config));
             }
 
             if (string.IsNullOrEmpty(config.api_key))
