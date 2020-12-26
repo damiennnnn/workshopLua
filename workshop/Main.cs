@@ -169,8 +169,12 @@ namespace workshopgen
             {
                 foreach (var str in Lua)
                     writer.WriteLine(str);
-            }
 
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine(string.Format("Saved to: {0}", filepath));
+                Console.ResetColor();
+            }
+            Console.CursorVisible = true;
         }
 
         static void SetupInterfaces()
