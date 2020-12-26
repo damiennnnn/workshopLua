@@ -133,9 +133,7 @@ namespace workshopgen
                 Console.WriteLine(string.Format(" {0}/{1} ", progress, count));
                 Console.WriteLine("");
                 //
-
-                if (Verbose)
-                    Console.WriteLine(string.Concat(fileDetails.Title, " ", fileDetails.PublishedFileId)); // Output information in realtime
+                Console.WriteLine(string.Concat(fileDetails.Title, " ", fileDetails.PublishedFileId)); // Output information in realtime
 
                 Files.Add(fileDetails);
             }
