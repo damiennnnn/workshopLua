@@ -88,7 +88,7 @@ namespace workshopgen
             if (string.IsNullOrEmpty(config.fullpath))
                 config.fullpath = workingPath;
 
-            if (args != null)
+            if (args?.Length > 0)
             {
                 Console.WriteLine(string.Format("Using provided Workshop ID: {0}", args[0]));
                 config.workshop_id = args[0];
