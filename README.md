@@ -21,7 +21,9 @@
 
 2. Run with `dotnet run` in a terminal, or build with `dotnet build`
 
-To build as a single-file executable, publish the project with this command: `dotnet publish -r PLATFORM -p:PublishSingleFile=true --self-contained false`.
+To build as a single-file executable, publish the project with this command: 
+`dotnet publish -r PLATFORM -p:PublishSingleFile=true --self-contained false`.
+
 Replace `PLATFORM` with `linux-x64` or `win-x64`, platform dependent.
 
 A Visual Studio solution is also provided
