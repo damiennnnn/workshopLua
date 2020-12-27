@@ -3,7 +3,7 @@
 ##### An application that utilises the Steam Web API to automatically produce workshop.lua files for use with a Garry's Mod dedicated server. Works on both Windows and Linux.
 ------------
 
-**Requires .NET Core 3.1 or .NET 5**
+**Requires .NET 5**
 	Download here: https://dotnet.microsoft.com/download
 	
 **Dependencies**
