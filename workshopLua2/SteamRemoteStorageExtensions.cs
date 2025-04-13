@@ -27,9 +27,10 @@ public static class SteamRemoteStorageExtensions
         response.EnsureSuccessStatusCode();
 
         // Deserialise this into our response root object.
-        var deserialised = await JsonSerializer.DeserializeAsync<ResponseRoot>(
+
+        var deserialised = await JsonSerializer.DeserializeAsync(
             await response.Content.ReadAsStreamAsync(),
-            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            RootResponseSourceGenerationContext.Default.RootResponse);
 
         if (deserialised.Response.CollectionDetails != null)
             return deserialised.Response.CollectionDetails.First().Children;
@@ -51,11 +52,5 @@ public static class SteamRemoteStorageExtensions
         }).ToList();
 
         return await storage.GetPublishedFileDetailsAsync((uint)ids.Count, ids);
-    }
-
-    private struct ResponseRoot
-    {
-        // Steam web API returns the response wrapped by this response 'root' object, for some reason. This response property contains the useful information.
-        public CollectionDetailsResponse Response { get; init; }
     }
 }
