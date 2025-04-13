@@ -37,6 +37,8 @@ public static class SteamRemoteStorageExtensions
         throw new NullReferenceException("Collection details is null in Steam API response.");
     }
     
+    // In theory, we don't need to do this. In practice, I wrote this before realising that.
+    // getting the title information is nice tho
     public static async Task<ISteamWebResponse<IReadOnlyCollection<PublishedFileDetailsModel>>> GetFileDetails(this ISteamRemoteStorage storage,
         IEnumerable<ItemDetail> collectionItems)
     {

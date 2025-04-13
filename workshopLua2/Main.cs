@@ -47,6 +47,7 @@ public static class WorkshopLua
     }
     private static void RootCommandHandler(string apiKey, string workshopId, string filePath, bool verbose)
     {
+        // Spent too much time battling with async methods, this works and I don't want to touch it
         DoWorkshopProcess(apiKey, workshopId, filePath, verbose)
             .Wait();
     }
@@ -61,7 +62,7 @@ public static class WorkshopLua
         AnsiConsole.WriteLine($"Gathering collection information for collection ID {workshopId}...");
         var itemsEnumerable = await builder.GetCollectionItems();
         
-        // This shouldn't really be possible.
+        // This shouldn't really be possible. ReSharper will complain without it.
         if (itemsEnumerable is null)
             throw new NullReferenceException("Collection items is null!");
         
@@ -81,7 +82,10 @@ public static class WorkshopLua
                 
                 foreach (var file in builder.PublishedFileDetails(itemsArray))
                 {
+                    // Completely useless, just looks cool
                     ctx.Status = $"Processing item {++itemCounter}/{itemsArray.Length}...";
+                    
+                    // Append title and ID info to workshop.lua file
                     workshopLua.AppendAddon(file.PublishedFileId, file.Title);
                     
                     if (verbose)
@@ -93,7 +97,9 @@ public static class WorkshopLua
                     AnsiConsole.MarkupLineInterpolated($"[yellow]{stopwatch.ElapsedMilliseconds}ms elapsed.[/]");
             });
         
+        // Flush underlying StreamWriter to ensure we actually write to the workshop.lua file.
         workshopLua.Flush();
+        
         AnsiConsole.MarkupLine("[green]:check_mark_button: Complete![/]");
     }
 }
