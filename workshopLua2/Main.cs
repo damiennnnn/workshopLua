@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using System.Diagnostics;
 using Spectre.Console;
 using SteamWebAPI2.Utilities;
 using workshopLua2.SteamData;
@@ -32,7 +33,6 @@ public static class WorkshopLua
             "Path to save workshop.lua file to.");
         
         var verboseOption = new Option<bool>("--verbose",
-            () => true,
             "Verbose output");
         
         var rootCommand =
@@ -59,36 +59,41 @@ public static class WorkshopLua
         var workshopLua = new WorkshopLuaFile(filePath);
         
         AnsiConsole.WriteLine($"Gathering collection information for collection ID {workshopId}...");
-        var items = await builder.GetCollectionItems();
+        var itemsEnumerable = await builder.GetCollectionItems();
         
         // This shouldn't really be possible.
-        if (items is null)
+        if (itemsEnumerable is null)
             throw new NullReferenceException("Collection items is null!");
         
-        // Configure some nice graphical output
-        var table = new Table().LeftAligned();
-        var columns = new[]
-        {
-            new TableColumn("Addon Title"), new TableColumn("ID")
-        };
+        // Avoid resharper complaining about multiple enumeration.
+        var itemsArray = itemsEnumerable.ToArray();
         
-        if (verbose)
-            table.AddColumns(columns);
+        AnsiConsole.WriteLine($"{itemsArray.Length} collection item(s) found.");
+
+        var itemCounter = 0;
         
-        await AnsiConsole.Live(table)
-            .StartAsync(async ctx =>
-            {
-                await foreach (var file in builder.PublishedFileDetails(items))
-                { 
-                    workshopLua.AppendAddon(file.Data.PublishedFileId, file.Data.Title);
+        AnsiConsole.Status()
+            .Spinner(Spinner.Known.Dots)
+            .Start("Processing...", ctx =>
+            {   
+                // Stopwatch for profiling purposes
+                Stopwatch stopwatch = Stopwatch.StartNew();
+                
+                foreach (var file in builder.PublishedFileDetails(itemsArray))
+                {
+                    ctx.Status = $"Processing item {++itemCounter}/{itemsArray.Length}...";
+                    workshopLua.AppendAddon(file.PublishedFileId, file.Title);
                     
-                    if (!verbose) continue;
-                    table.AddRow(Markup.Escape(file.Data.Title), file.Data.PublishedFileId.ToString());
-                    ctx.Refresh();
+                    if (verbose)
+                        AnsiConsole.MarkupLineInterpolated($"[bold]Verbose[/]: {file.Title} - {file.PublishedFileId}");
                 }
+
+                stopwatch.Stop();
+                if (verbose)
+                    AnsiConsole.MarkupLineInterpolated($"[yellow]{stopwatch.ElapsedMilliseconds}ms elapsed.[/]");
             });
         
         workshopLua.Flush();
-        AnsiConsole.WriteLine("Complete!");
+        AnsiConsole.MarkupLine("[green]:check_mark_button: Complete![/]");
     }
 }

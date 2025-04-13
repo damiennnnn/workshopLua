@@ -37,7 +37,7 @@ A Visual Studio solution is also provided
   
   --path <path>              Path to save workshop.lua file to.
   
-  --verbose                  Verbose output [default: True]
+  --verbose                  Verbose output
   
   --help                     Show help information
 ```

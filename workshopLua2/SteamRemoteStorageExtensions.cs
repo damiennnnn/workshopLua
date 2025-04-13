@@ -37,17 +37,18 @@ public static class SteamRemoteStorageExtensions
         throw new NullReferenceException("Collection details is null in Steam API response.");
     }
     
-    // Using async enumerable lets us do fun things with the live display of Spectre.Console. I still don't understand how they fully work
-    public static async IAsyncEnumerable<ISteamWebResponse<PublishedFileDetailsModel>> GetFileDetails(this ISteamRemoteStorage storage,
+    public static async Task<ISteamWebResponse<IReadOnlyCollection<PublishedFileDetailsModel>>> GetFileDetails(this ISteamRemoteStorage storage,
         IEnumerable<ItemDetail> collectionItems)
     {
-        foreach (var item in collectionItems)
+        var ids = collectionItems.Select(item =>
         {
-            if (!uint.TryParse(item.PublishedFileId, out var fileId))
-                throw new NullReferenceException("PublishedFileId is null in Steam API response.");
-            
-            yield return await storage.GetPublishedFileDetailsAsync(fileId);
-        }
+            if (!ulong.TryParse(item.PublishedFileId, out var itemId))
+                throw new NullReferenceException("Exception parsing PublishedFileId to uint.");
+
+            return itemId;
+        }).ToList();
+
+        return await storage.GetPublishedFileDetailsAsync((uint)ids.Count, ids);
     }
 
     private struct ResponseRoot

@@ -31,9 +31,9 @@ public class WorkshopLuaUtilities
         return await _steamRemoteStorage.GetCollectionItems(_workshopId, _httpClient);
     }
 
-    public IAsyncEnumerable<ISteamWebResponse<PublishedFileDetailsModel>> PublishedFileDetails(
+    public IReadOnlyCollection<PublishedFileDetailsModel> PublishedFileDetails(
         IEnumerable<ItemDetail> itemDetails)
     {
-        return _steamRemoteStorage.GetFileDetails(itemDetails);
+        return _steamRemoteStorage.GetFileDetails(itemDetails).Result.Data;
     }
 }
