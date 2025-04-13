@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using Spectre.Console;
 using SteamWebAPI2.Utilities;
-using workshopLua2.SteamData;
 
 namespace workshopLua2;
 
@@ -12,21 +11,41 @@ public static class WorkshopLua
     {
         var apiKeyOption = new Option<string>(
             "--apiKey",
+            parseArgument: result =>
+            {
+                if (!result.Tokens.Any())
+                {
+                    result.ErrorMessage = "--apiKey is required";
+                    return string.Empty;
+                }
+                
+                var value = result.Tokens.Single().Value;
+                if (string.IsNullOrEmpty(value) || value.Length != 32)
+                    result.ErrorMessage = "Please provide a valid Steam API Key";
+
+                return value;
+            },
+            isDefault: true,
             "The Steam Web API Developer Key to use.");
-        apiKeyOption.AddValidator(r =>
-        {
-            if (string.IsNullOrEmpty(r.GetValueForOption(apiKeyOption)))
-                r.ErrorMessage = "Please provide a non-empty Steam Web API Developer Key";
-        });
 
         var workshopIdOption = new Option<string>(
             "--workshopId",
+            parseArgument: result =>
+            { 
+                if (!result.Tokens.Any())
+                {
+                    result.ErrorMessage = "--workshopId is required";
+                    return string.Empty;
+                }
+                
+                var value = result.Tokens.Single().Value;
+                if (!long.TryParse(value, out _))
+                    result.ErrorMessage = "Please provide a valid Workshop ID.";
+
+                return value;
+            },
+            isDefault: true,
             "ID of the workshop collection to pull from.");
-        workshopIdOption.AddValidator(optionResult =>
-        {
-            if (string.IsNullOrEmpty(optionResult.GetValueForOption(workshopIdOption)))
-                optionResult.ErrorMessage = "Please provide a non-empty Workshop ID";
-        });
         
         var filePathOption = new Option<string>(
             "--path",
@@ -37,6 +56,7 @@ public static class WorkshopLua
         
         var rootCommand =
             new RootCommand("workshopLua 2 - workshop.lua generator for Garry's Mod dedicated servers");
+        
         rootCommand.AddOption(apiKeyOption);
         rootCommand.AddOption(workshopIdOption);
         rootCommand.AddOption(filePathOption);
