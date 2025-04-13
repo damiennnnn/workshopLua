@@ -59,3 +59,9 @@ Example `workshop.lua` output:
 resource.AddWorkshop("430091721") -- Orbital Air Strike
 resource.AddWorkshop("152521877") -- vFire - Dynamic Fire
 ```
+
+------------
+
+## License
+
+Licensed under GNU v3, found in LICENSE file.
