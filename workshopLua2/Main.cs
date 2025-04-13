@@ -1,6 +1,7 @@
 ﻿using System.CommandLine;
 using Spectre.Console;
 using SteamWebAPI2.Utilities;
+using workshopLua2.SteamData;
 
 namespace workshopLua2;
 
@@ -42,7 +43,6 @@ public static class WorkshopLua
         rootCommand.AddOption(verboseOption);
 
         rootCommand.SetHandler(RootCommandHandler, apiKeyOption, workshopIdOption, filePathOption, verboseOption);
-
         await rootCommand.InvokeAsync(args);
     }
     private static void RootCommandHandler(string apiKey, string workshopId, string filePath, bool verbose)
@@ -61,6 +61,11 @@ public static class WorkshopLua
         AnsiConsole.WriteLine($"Gathering collection information for collection ID {workshopId}...");
         var items = await builder.GetCollectionItems();
         
+        // This shouldn't really be possible.
+        if (items is null)
+            throw new NullReferenceException("Collection items is null!");
+        
+        // Configure some nice graphical output
         var table = new Table().LeftAligned();
         var columns = new[]
         {

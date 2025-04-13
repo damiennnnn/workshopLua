@@ -18,7 +18,7 @@ public static class SteamRemoteStorageExtensions
     }
 
     // SteamWebApi2 library doesn't include a wrapper for the GetCollectionItems API, so we have to create our own.
-    public static async Task<IEnumerable<ItemDetail>> GetCollectionItems(this ISteamRemoteStorage storage,
+    public static async Task<IEnumerable<ItemDetail>?> GetCollectionItems(this ISteamRemoteStorage storage,
         string workshopCollectionId, HttpClient httpClient)
     {
         // Send post request to Steam web API to get collection details.
@@ -31,7 +31,10 @@ public static class SteamRemoteStorageExtensions
             await response.Content.ReadAsStreamAsync(),
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-        return deserialised.Response.CollectionDetails.First().Children;
+        if (deserialised.Response.CollectionDetails != null)
+            return deserialised.Response.CollectionDetails.First().Children;
+
+        throw new NullReferenceException("Collection details is null in Steam API response.");
     }
     
     // Using async enumerable lets us do fun things with the live display of Spectre.Console. I still don't understand how they fully work
@@ -40,7 +43,10 @@ public static class SteamRemoteStorageExtensions
     {
         foreach (var item in collectionItems)
         {
-            yield return await storage.GetPublishedFileDetailsAsync(ulong.Parse(item.PublishedFileId));
+            if (!uint.TryParse(item.PublishedFileId, out var fileId))
+                throw new NullReferenceException("PublishedFileId is null in Steam API response.");
+            
+            yield return await storage.GetPublishedFileDetailsAsync(fileId);
         }
     }
 

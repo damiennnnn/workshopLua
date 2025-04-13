@@ -26,7 +26,7 @@ public class WorkshopLuaUtilities
         _steamRemoteStorage = _interfaceFactory.CreateSteamWebInterface<SteamRemoteStorage>(_httpClient);
     }
 
-    public async Task<IEnumerable<ItemDetail>> GetCollectionItems()
+    public async Task<IEnumerable<ItemDetail>?> GetCollectionItems()
     {
         return await _steamRemoteStorage.GetCollectionItems(_workshopId, _httpClient);
     }
