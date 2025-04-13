@@ -27,11 +27,16 @@ public static class SteamRemoteStorageExtensions
         response.EnsureSuccessStatusCode();
 
         // Deserialise this into our response root object.
-
         var deserialised = await JsonSerializer.DeserializeAsync(
             await response.Content.ReadAsStreamAsync(),
             RootResponseSourceGenerationContext.Default.RootResponse);
 
+        // Something went wrong.
+        if (deserialised is null)
+        {
+            throw new NullReferenceException("Deserialized response is null.");
+        }
+        
         if (deserialised.Response.CollectionDetails != null)
             return deserialised.Response.CollectionDetails.First().Children;
 

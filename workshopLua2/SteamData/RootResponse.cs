@@ -5,7 +5,7 @@ namespace workshopLua2.SteamData;
 public class RootResponse
 {
     // Steam web API returns the response wrapped by this response 'root' object, for some reason. This response property contains the useful information.
-    public CollectionDetailsResponse Response { get; init; }
+    public required CollectionDetailsResponse Response { get; init; }
 }
 
 // Source generation stuff for native AOT compatibility
