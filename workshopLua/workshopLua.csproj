@@ -1,23 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <LangVersion>default</LangVersion>
-    <RootNamespace>workshop</RootNamespace>
-    <Company>workshopLua 2</Company>
-    <Product>workshopLua 2</Product>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <LangVersion>default</LangVersion>
+        <RootNamespace>workshop</RootNamespace>
+        <Company>workshopLua 2</Company>
+        <Product>workshopLua 2</Product>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Spectre.Console.Cli" Version="0.50.1-preview.0.3" />
-    <PackageReference Include="SteamWebAPI2" Version="4.2.6" />
-    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" Version="12.0.3"/>
+        <PackageReference Include="Spectre.Console.Cli" Version="0.50.1-preview.0.3"/>
+        <PackageReference Include="SteamWebAPI2" Version="4.2.6"/>
+        <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="workshopLua2.cs~" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Remove="workshopLua2.cs~"/>
+    </ItemGroup>
 
 </Project>
