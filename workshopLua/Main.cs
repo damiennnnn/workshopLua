@@ -47,7 +47,7 @@ namespace workshopgen
             return await response.Content.ReadAsStringAsync();
         }
 
-        static async Task Main(string[] args)
+        static async Task Mainff(string[] args)
         {
             Console.OutputEncoding = Encoding.UTF8;
             Console.CursorVisible = false;
@@ -83,7 +83,7 @@ namespace workshopgen
                 Verbose = false;
 
             if (string.IsNullOrEmpty(config.filename))
-                config.filename = "workshop.lua";
+                config.filename = "workshopLua.lua";
 
             if (string.IsNullOrEmpty(config.fullpath))
                 config.fullpath = workingPath;
@@ -148,7 +148,7 @@ namespace workshopgen
                 }
             }
 
-            List<string> Lua = new List<string>(); // Create a list of strings to write to our workshop.lua
+            List<string> Lua = new List<string>(); // Create a list of strings to write to our workshopLua.lua
 
             foreach (var file in Files)
             {
