@@ -30,3 +30,22 @@ jobs:
       run: dotnet publish -r linux-x64 -c Release -f net8.0 --self-contained false -o ./publish /p:PublishSingleFile=true /p:PublishTrimmed=false /p:TrimMode=full /p:PublishAot=false /p:InvariantGlobalization=true
     - name: Publish Linux (Native AOT)
       run: dotnet publish -r linux-x64 -c Release -f net8.0 --self-contained false -o ./publish-native /p:PublishSingleFile=true /p:PublishTrimmed=false /p:TrimMode=full /p:PublishAot=false /p:InvariantGlobalization=true
+    
+    # Upload published files as artifacts
+    - name: Upload Windows publish artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: publish-win
+        path: ./publish-win
+
+    - name: Upload Linux publish artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: publish-linux
+        path: ./publish
+
+    - name: Upload Linux Native AOT publish artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: publish-native
+        path: ./publish-native
