@@ -1,7 +1,6 @@
 ﻿using System.CommandLine;
 using System.Diagnostics;
 using System.Net;
-using Spectre.Console;
 using workshopLua2.Steam.Api;
 
 namespace workshopLua2;
@@ -84,7 +83,7 @@ public static class WorkshopLua
         
         var workshopLua = new WorkshopLuaFile(filePath);
         
-        AnsiConsole.WriteLine($"Gathering collection information for collection ID {workshopId}...");
+        Console.WriteLine($"Gathering collection information for collection ID {workshopId}...");
         var itemsEnumerable = await remoteStorage.GetCollectionItems(workshopId);
         
         // This shouldn't really be possible. ReSharper will complain without it.
@@ -94,36 +93,27 @@ public static class WorkshopLua
         // Avoid resharper complaining about multiple enumeration.
         var itemsArray = itemsEnumerable.ToArray();
         
-        AnsiConsole.WriteLine($"{itemsArray.Length} collection item(s) found.");
+        Console.WriteLine($"{itemsArray.Length} collection item(s) found.");
 
-        var itemCounter = 0;
-        
-        await AnsiConsole.Status()
-            .Spinner(Spinner.Known.Dots)
-            .StartAsync("Processing...", async ctx =>
-            {   
-                // Stopwatch for profiling purposes
-                Stopwatch stopwatch = Stopwatch.StartNew();
-                foreach (var file in await remoteStorage.GetFileDetails(itemsArray))
-                {
-                    // Completely useless, just looks cool
-                    ctx.Status = $"Processing item {++itemCounter}/{itemsArray.Length}...";
+        Stopwatch stopwatch = Stopwatch.StartNew();
+        foreach (var file in await remoteStorage.GetFileDetails(itemsArray))
+        {
+            // Append title and ID info to workshop.lua file
+            workshopLua.AppendAddon(file.PublishedFileId, file.Title);
                     
-                    // Append title and ID info to workshop.lua file
-                    workshopLua.AppendAddon(file.PublishedFileId, file.Title);
-                    
-                    if (verbose)
-                        AnsiConsole.MarkupLineInterpolated($"[bold]Verbose[/]: {file.Title} - {file.PublishedFileId}");
-                }
+            if (verbose)
+                Console.WriteLine($"Verbose: {file.Title} - {file.PublishedFileId}");
+        }
 
-                stopwatch.Stop();
-                if (verbose)
-                    AnsiConsole.MarkupLineInterpolated($"[yellow]{stopwatch.ElapsedMilliseconds}ms elapsed.[/]");
-            });
+        stopwatch.Stop();
+        if (verbose)
+            Console.WriteLine($"{stopwatch.ElapsedMilliseconds}ms elapsed.");
         
         // Flush underlying StreamWriter to ensure we actually write to the workshop.lua file.
         workshopLua.Flush();
-        
-        AnsiConsole.MarkupLine("[green]:check_mark_button: Complete![/]");
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("\u2705 Complete!");
+        Console.ResetColor();
     }
 }

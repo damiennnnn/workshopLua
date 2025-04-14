@@ -3,17 +3,13 @@
 ##### A small utility for generating workshop.lua files from a provided workshop collection ID.
 ------------
 
-**Requires .NET 8**
-	
-**Dependencies**
-- [Spectre.Console](https://spectreconsole.net/ "Spectre.Console")
-- [SteamWebApi2](https://github.com/babelshift/SteamWebAPI2 "SteamWebApi2")
+**Requires .NET 8** to build.
+
 
 ##### A Steam API key is required for retrieving information from the Steam Workshop. You can access yours here: https://steamcommunity.com/dev/apikey
 
 ------------
 ## Build
-
 
 1. Clone the repository locally.
 `git clone https://github.com/damiennnnn/workshopLua.git`
