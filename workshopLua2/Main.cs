@@ -1,7 +1,8 @@
 ﻿using System.CommandLine;
 using System.Diagnostics;
+using System.Net;
 using Spectre.Console;
-using SteamWebAPI2.Utilities;
+using workshopLua2.Steam.Api;
 
 namespace workshopLua2;
 
@@ -74,13 +75,17 @@ public static class WorkshopLua
 
     private static async Task DoWorkshopProcess(string apiKey, string workshopId, string filePath, bool verbose)
     {
-        var interfaceFactory = new SteamWebInterfaceFactory(apiKey);
+        var remoteStorage = new SteamRemoteStorage(apiKey, new HttpClient(
+            new HttpClientHandler()
+        {
+            AutomaticDecompression =
+                DecompressionMethods.GZip | DecompressionMethods.Deflate | DecompressionMethods.Brotli
+        }));
         
-        var builder = new WorkshopLuaUtilities(workshopId, interfaceFactory);
         var workshopLua = new WorkshopLuaFile(filePath);
         
         AnsiConsole.WriteLine($"Gathering collection information for collection ID {workshopId}...");
-        var itemsEnumerable = await builder.GetCollectionItems();
+        var itemsEnumerable = await remoteStorage.GetCollectionItems(workshopId);
         
         // This shouldn't really be possible. ReSharper will complain without it.
         if (itemsEnumerable is null)
@@ -93,14 +98,13 @@ public static class WorkshopLua
 
         var itemCounter = 0;
         
-        AnsiConsole.Status()
+        await AnsiConsole.Status()
             .Spinner(Spinner.Known.Dots)
-            .Start("Processing...", ctx =>
+            .StartAsync("Processing...", async ctx =>
             {   
                 // Stopwatch for profiling purposes
                 Stopwatch stopwatch = Stopwatch.StartNew();
-                
-                foreach (var file in builder.PublishedFileDetails(itemsArray))
+                foreach (var file in await remoteStorage.GetFileDetails(itemsArray))
                 {
                     // Completely useless, just looks cool
                     ctx.Status = $"Processing item {++itemCounter}/{itemsArray.Length}...";

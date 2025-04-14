@@ -15,7 +15,7 @@ public class WorkshopLuaFile
         _writer.WriteLine("-- github.com/damiennnnn/workshopLua");
     }
 
-    public void AppendAddon(ulong id, string title)
+    public void AppendAddon(string id, string title)
     {
         string toAppend = $"resource.AddWorkshop(\"{id}\") -- {title}";
         
