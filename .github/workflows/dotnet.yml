@@ -24,5 +24,9 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Publish
-      run: dotnet publish -r linux-x64 -c Release
+    - name: Publish Windows (Framework Dependent)
+      run: dotnet publish -r win-x64 -c Release -f net8.0 --self-contained false -o ./publish-win /p:PublishSingleFile=true /p:PublishTrimmed=false /p:TrimMode=full /p:PublishAot=false /p:InvariantGlobalization=true
+    - name: Publish Linux (Framework Dependent)
+      run: dotnet publish -r linux-x64 -c Release -f net8.0 --self-contained false -o ./publish /p:PublishSingleFile=true /p:PublishTrimmed=false /p:TrimMode=full /p:PublishAot=false /p:InvariantGlobalization=true
+    - name: Publish Linux (Native AOT)
+      run: dotnet publish -r linux-x64 -c Release -f net8.0 --self-contained false -o ./publish-native /p:PublishSingleFile=true /p:PublishTrimmed=false /p:TrimMode=full /p:PublishAot=false /p:InvariantGlobalization=true
